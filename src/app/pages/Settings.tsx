@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../components/theme-provider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
 export function Settings() {
   const navigate = useNavigate();
@@ -50,9 +51,16 @@ export function Settings() {
               <p className="font-medium text-gray-900 dark:text-gray-100">Visão Padrão (Tema)</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">Altere o tema visual do sistema</p>
             </div>
-            <Button variant="outline" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-              Alternar
-            </Button>
+            <Select value={theme} onValueChange={(value: any) => setTheme(value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Selecione o Tema" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Claro</SelectItem>
+                <SelectItem value="dark">Escuro</SelectItem>
+                <SelectItem value="dim">Dim (Azulado)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex items-center justify-between py-3">
             <div>
