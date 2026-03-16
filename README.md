@@ -63,3 +63,21 @@ Este projeto é um **protótipo front-end**, portanto:
 - Não possui integração com um banco de dados real no momento.
 - Os dados exibidos (pacientes, amostras, resultados) vêm de um arquivo de **Mock** local (`mockData.ts`).
 - Eventuais ações como login aceitam qualquer dado (ou credenciais fictícias de teste) para fins de navegação pela interface.
+
+---
+
+## 🎨 Temas e Experiência Visual
+
+O sistema conta com três modos visuais distintos que podem ser alterados nas **Configurações**:
+
+### 1. Modo Claro (Padrão)
+Interface limpa com foco em legibilidade e profissionalismo.
+![Modo Claro](assets/screenshots/light_mode.png)
+
+### 2. Modo Dim (Azulado)
+Inspirado na estética "navy" moderna, ideal para ambientes de baixa luminosidade sem perder a saturação de cores.
+![Modo Dim](assets/screenshots/dim_mode.png)
+
+### 3. Modo Escuro
+Foco total em contraste e redução de fadiga ocular, utilizando tons de preto puro e chumbo.
+![Modo Escuro](assets/screenshots/dark_mode.png)
