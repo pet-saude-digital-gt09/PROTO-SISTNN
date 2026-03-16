@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -67,7 +68,7 @@ export function OperationalReports() {
   };
 
   const exportToExcel = () => {
-    alert("Exportando para o Excel... (Ação simulada)");
+    toast.info("Exportando para o Excel... (Ação simulada)");
   };
 
   return (

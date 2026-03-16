@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../components/ui/button';
+import { toast } from 'sonner';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -29,7 +30,7 @@ export function RegisterPatient() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Paciente registrado com sucesso!');
+    toast.success('Paciente registrado com sucesso!');
     navigate('/sample-collection');
   };
 

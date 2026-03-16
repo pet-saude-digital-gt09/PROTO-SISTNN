@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { mockLabResults } from '../data/mockData';
@@ -25,7 +26,7 @@ export function LabResults() {
 
   const handleLiberate = () => {
     if (selectedResults.length === 0) {
-      alert('Por favor, selecione pelo menos um resultado para liberar');
+      toast.error('Por favor, selecione pelo menos um resultado para liberar');
       return;
     }
     
@@ -39,7 +40,7 @@ export function LabResults() {
       }
     }
     
-    alert(`${selectedResults.length} resultado(s) liberado(s) com sucesso!`);
+    toast.success(`${selectedResults.length} resultado(s) liberado(s) com sucesso!`);
     setSelectedResults([]);
   };
 

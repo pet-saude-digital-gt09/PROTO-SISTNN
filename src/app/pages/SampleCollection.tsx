@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../components/ui/button';
+import { toast } from 'sonner';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -20,11 +21,13 @@ export function SampleCollection() {
 
   const handleGenerateCode = () => {
     if (!selectedPatient || !collectionData.collectionUnit || !collectionData.technician) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+      toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
     }
     const rnCode = `202603${Math.floor(Math.random() * 100000).toString().padStart(6, '0')}`;
-    alert(`Código DNV Gerado: ${rnCode}\nImprimindo formulário de coleta...`);
+    toast.success(`Código DNV Gerado: ${rnCode}`, {
+      description: 'Imprimindo formulário de coleta...'
+    });
   };
 
   return (

@@ -8,6 +8,7 @@ import { CheckCircle, XCircle, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { toast } from 'sonner';
 
 export function Triage() {
   const [rnCode, setRnCode] = useState('');
@@ -21,7 +22,7 @@ export function Triage() {
     if (patient) {
       setSelectedPatient(patient);
     } else {
-      alert('Patient not found. Please verify the RN code.');
+      toast.error('Paciente não encontrado. Por favor, verifique o código DNV.');
       setSelectedPatient(null);
     }
   };
@@ -29,17 +30,21 @@ export function Triage() {
   const handleApprove = () => {
     if (!selectedPatient) return;
     const internalControl = `IC${new Date().getFullYear()}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
-    alert(`Sample approved!\nInternal Control Generated: ${internalControl}`);
+    toast.success('Amostra aprovada!', {
+      description: `Controle Interno Gerado: ${internalControl}`
+    });
     setSelectedPatient(null);
     setRnCode('');
   };
 
   const handleReject = () => {
     if (!rejectionReason) {
-      alert('Please select a reason for rejection');
+      toast.error('Por favor, selecione um motivo para rejeição');
       return;
     }
-    alert(`Recollection request sent!\nReason: ${rejectionReason}\nNotes: ${rejectionNotes}`);
+    toast.error('Solicitação de recoleta enviada!', {
+      description: `Motivo: ${rejectionReason}\nObservações: ${rejectionNotes}`
+    });
     setShowRejectModal(false);
     setSelectedPatient(null);
     setRnCode('');
@@ -53,11 +58,11 @@ export function Triage() {
         {/* Left Side - Search */}
         <Card>
           <CardHeader>
-            <CardTitle>Sample Reception</CardTitle>
+            <CardTitle>Recepção de Amostra</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="rnCode">Scan or Enter 12-Digit RN Code</Label>
+              <Label htmlFor="rnCode">Escaneie ou Digite o Código DNV de 12 Dígitos</Label>
               <div className="flex gap-2">
                 <Input
                   id="rnCode"
@@ -77,7 +82,7 @@ export function Triage() {
             {!selectedPatient && (
               <div className="text-center py-12 text-gray-400">
                 <Beaker className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p>Enter RN code to pull up patient data</p>
+                <p>Digite o código DNV para buscar os dados do paciente</p>
               </div>
             )}
           </CardContent>
@@ -86,7 +91,7 @@ export function Triage() {
         {/* Right Side - Validation */}
         <Card className={selectedPatient ? 'border-2 border-blue-200' : ''}>
           <CardHeader>
-            <CardTitle>Sample Validation</CardTitle>
+            <CardTitle>Validação de Amostra</CardTitle>
           </CardHeader>
           <CardContent>
             {selectedPatient ? (
@@ -94,38 +99,38 @@ export function Triage() {
                 {/* Patient Info */}
                 <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                   <div>
-                    <p className="text-xs text-blue-600 font-medium">RN CODE</p>
+                    <p className="text-xs text-blue-600 font-medium">CÓDIGO DNV</p>
                     <p className="font-mono text-lg font-bold text-blue-900">{selectedPatient.rnCode}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-blue-600 font-medium">Newborn</p>
+                      <p className="text-blue-600 font-medium">Recém-nascido</p>
                       <p className="text-blue-900">{selectedPatient.name}</p>
                     </div>
                     <div>
-                      <p className="text-blue-600 font-medium">Mother</p>
+                      <p className="text-blue-600 font-medium">Mãe</p>
                       <p className="text-blue-900">{selectedPatient.motherName}</p>
                     </div>
                     <div>
-                      <p className="text-blue-600 font-medium">Date of Birth</p>
+                      <p className="text-blue-600 font-medium">Data de Nascimento</p>
                       <p className="text-blue-900">
-                        {new Date(selectedPatient.dateOfBirth).toLocaleDateString()}
+                        {new Date(selectedPatient.dateOfBirth).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                     <div>
-                      <p className="text-blue-600 font-medium">Collection Date</p>
+                      <p className="text-blue-600 font-medium">Data de Coleta</p>
                       <p className="text-blue-900">
                         {selectedPatient.collectionDate
-                          ? new Date(selectedPatient.collectionDate).toLocaleDateString()
+                          ? new Date(selectedPatient.collectionDate).toLocaleDateString('pt-BR')
                           : 'N/A'}
                       </p>
                     </div>
                     <div>
-                      <p className="text-blue-600 font-medium">Collection Unit</p>
+                      <p className="text-blue-600 font-medium">Posto de Coleta</p>
                       <p className="text-blue-900">{selectedPatient.collectionUnit || 'N/A'}</p>
                     </div>
                     <div>
-                      <p className="text-blue-600 font-medium">Weight</p>
+                      <p className="text-blue-600 font-medium">Peso</p>
                       <p className="text-blue-900">{selectedPatient.weight}g</p>
                     </div>
                   </div>
@@ -138,7 +143,7 @@ export function Triage() {
                     className="w-full h-14 bg-green-600 hover:bg-green-700 text-white text-lg"
                   >
                     <CheckCircle className="w-6 h-6 mr-2" />
-                    Approve Sample (Generate Internal Control)
+                    Aprovar Amostra (Gerar Controle Interno)
                   </Button>
                   <Button
                     onClick={() => setShowRejectModal(true)}
@@ -146,36 +151,36 @@ export function Triage() {
                     className="w-full h-14 text-lg"
                   >
                     <XCircle className="w-6 h-6 mr-2" />
-                    Reject Sample (Request Recollection)
+                    Rejeitar Amostra (Solicitar Recoleta)
                   </Button>
                 </div>
 
                 {/* Sample Quality Checklist */}
                 <div className="border-t pt-4">
-                  <h4 className="font-semibold text-sm mb-3">Quality Checklist:</h4>
+                  <h4 className="font-semibold text-sm mb-3">Checklist de Qualidade:</h4>
                   <div className="space-y-2 text-sm">
                     <label className="flex items-center gap-2">
                       <input type="checkbox" className="w-4 h-4 text-blue-600" />
-                      <span>Filter paper properly saturated</span>
+                      <span>Papel filtro adequadamente saturado</span>
                     </label>
                     <label className="flex items-center gap-2">
                       <input type="checkbox" className="w-4 h-4 text-blue-600" />
-                      <span>Sample completely dried</span>
+                      <span>Amostra completamente seca</span>
                     </label>
                     <label className="flex items-center gap-2">
                       <input type="checkbox" className="w-4 h-4 text-blue-600" />
-                      <span>No contamination visible</span>
+                      <span>Nenhuma contaminação visível</span>
                     </label>
                     <label className="flex items-center gap-2">
                       <input type="checkbox" className="w-4 h-4 text-blue-600" />
-                      <span>RN code legible and correct</span>
+                      <span>Código DNV legível e correto</span>
                     </label>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="text-center py-12 text-gray-400">
-                <p>No sample selected</p>
+                <p>Nenhuma amostra selecionada</p>
               </div>
             )}
           </CardContent>
@@ -186,49 +191,49 @@ export function Triage() {
       <Dialog open={showRejectModal} onOpenChange={setShowRejectModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Request New Sample (Recoleta)</DialogTitle>
+            <DialogTitle>Solicitar Nova Amostra (Recoleta)</DialogTitle>
             <DialogDescription>
               {selectedPatient && (
                 <span>
-                  Patient: {selectedPatient.name} - RN Code: {selectedPatient.rnCode}
+                  Paciente: {selectedPatient.name} - Código DNV: {selectedPatient.rnCode}
                 </span>
               )}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Reason for Non-conformity *</Label>
+              <Label>Motivo da Não Conformidade *</Label>
               <Select value={rejectionReason} onValueChange={setRejectionReason}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select reason..." />
+                  <SelectValue placeholder="Selecione o motivo..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="insufficient">Insufficient blood sample</SelectItem>
-                  <SelectItem value="contaminated">Sample contaminated</SelectItem>
-                  <SelectItem value="not-dried">Sample not properly dried</SelectItem>
-                  <SelectItem value="damaged">Filter paper damaged</SelectItem>
-                  <SelectItem value="incorrect-code">Incorrect RN code</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="insufficient">Amostra de sangue insuficiente</SelectItem>
+                  <SelectItem value="contaminated">Amostra contaminada</SelectItem>
+                  <SelectItem value="not-dried">Amostra não seca adequadamente</SelectItem>
+                  <SelectItem value="damaged">Papel filtro danificado</SelectItem>
+                  <SelectItem value="incorrect-code">Código DNV incorreto</SelectItem>
+                  <SelectItem value="other">Outro</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>Additional Observations</Label>
+              <Label>Observações Adicionais</Label>
               <Textarea
                 value={rejectionNotes}
                 onChange={(e) => setRejectionNotes(e.target.value)}
-                placeholder="Enter any additional notes..."
+                placeholder="Insira quaisquer observações adicionais..."
                 rows={4}
               />
             </div>
 
             <div className="flex gap-3 pt-4">
               <Button variant="outline" onClick={() => setShowRejectModal(false)} className="flex-1">
-                Cancel
+                Cancelar
               </Button>
               <Button onClick={handleReject} variant="destructive" className="flex-1">
-                Confirm Request
+                Confirmar Solicitação
               </Button>
             </div>
           </div>

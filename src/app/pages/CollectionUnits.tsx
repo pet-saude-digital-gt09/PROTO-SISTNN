@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { mockCollectionUnits } from '../data/mockData';
@@ -20,7 +21,7 @@ export function CollectionUnits() {
 
   const handleAddUnit = () => {
     if (!newUnit.name || !newUnit.cnesCode || !newUnit.municipality || !newUnit.regionalCode) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+      toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 

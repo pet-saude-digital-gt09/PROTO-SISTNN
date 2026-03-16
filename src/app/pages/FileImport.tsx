@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { toast } from 'sonner';
 import { Upload, CheckCircle, FileText } from 'lucide-react';
 
 interface ImportedFile {
@@ -55,7 +56,7 @@ export function FileImport() {
           );
         }, 2000);
       } else {
-        alert('Apenas arquivos .txt são aceitos');
+        toast.error('Apenas arquivos .txt são aceitos');
       }
     });
   };

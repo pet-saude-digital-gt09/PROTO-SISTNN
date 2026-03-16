@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -14,8 +15,12 @@ export function PasswordRecovery() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      toast.error('As senhas não coincidem!');
+      return;
+    }
     // Mock password change
-    alert('Password changed successfully!');
+    toast.success('Senha alterada com sucesso!');
     navigate('/login');
   };
 
@@ -28,20 +33,20 @@ export function PasswordRecovery() {
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Login
+          Voltar para o Login
         </Button>
 
         <Card>
           <CardHeader>
-            <CardTitle>Change Password</CardTitle>
+            <CardTitle>Alterar Senha</CardTitle>
             <CardDescription>
-              Enter your current password and choose a new one
+              Digite sua senha atual e escolha uma nova
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="current">Current Password</Label>
+                <Label htmlFor="current">Senha Atual</Label>
                 <Input
                   id="current"
                   type="password"
@@ -52,7 +57,7 @@ export function PasswordRecovery() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="new">New Password</Label>
+                <Label htmlFor="new">Nova Senha</Label>
                 <Input
                   id="new"
                   type="password"
@@ -61,12 +66,12 @@ export function PasswordRecovery() {
                   required
                 />
                 <p className="text-xs text-gray-500">
-                  Minimum 8 characters, including uppercase, lowercase, and numbers
+                  Mínimo de 8 caracteres, incluindo maiúsculas, minúsculas e números
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirm">Confirm New Password</Label>
+                <Label htmlFor="confirm">Confirmar Nova Senha</Label>
                 <Input
                   id="confirm"
                   type="password"
@@ -80,7 +85,7 @@ export function PasswordRecovery() {
                 type="submit" 
                 className="w-full bg-blue-600 hover:bg-blue-700"
               >
-                Save Changes
+                Salvar Alterações
               </Button>
             </form>
           </CardContent>
