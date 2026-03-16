@@ -55,7 +55,7 @@ export function CollectionUnits() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead>Nome do Posto</TableHead>
                   <TableHead>Código CNES</TableHead>
                   <TableHead>Município</TableHead>
@@ -160,7 +160,7 @@ export function CollectionUnits() {
         <Card>
           <CardContent className="pt-6 text-center">
             <p className="text-4xl font-bold text-blue-600">{units.length}</p>
-            <p className="text-sm text-gray-600 mt-2">Total de Postos de Coleta</p>
+            <p className="text-sm text-muted-foreground mt-2">Total de Postos de Coleta</p>
           </CardContent>
         </Card>
         <Card>
@@ -168,7 +168,7 @@ export function CollectionUnits() {
             <p className="text-4xl font-bold text-blue-600">
               {new Set(units.map(u => u.municipality)).size}
             </p>
-            <p className="text-sm text-gray-600 mt-2">Municípios Cobertos</p>
+            <p className="text-sm text-muted-foreground mt-2">Municípios Cobertos</p>
           </CardContent>
         </Card>
         <Card>
@@ -176,16 +176,16 @@ export function CollectionUnits() {
             <p className="text-4xl font-bold text-blue-600">
               {new Set(units.map(u => u.regionalCode)).size}
             </p>
-            <p className="text-sm text-gray-600 mt-2">Regionais de Saúde</p>
+            <p className="text-sm text-muted-foreground mt-2">Regionais de Saúde</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Information */}
-      <Card className="bg-gray-50">
+      <Card className="bg-muted">
         <CardContent className="pt-6">
-          <h4 className="font-semibold text-gray-900 mb-3">Requisitos do Posto de Coleta:</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <h4 className="font-semibold text-foreground mb-3">Requisitos do Posto de Coleta:</h4>
+          <ul className="space-y-2 text-sm text-foreground/80">
             <li>• Todos os postos de coleta devem ter um código CNES válido registrado no Ministério da Saúde</li>
             <li>• Os postos devem manter condições adequadas de armazenamento para amostras de sangue (15-30°C)</li>
             <li>• Pessoal treinado é necessário para a técnica correta de coleta de amostras</li>

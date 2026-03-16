@@ -87,14 +87,14 @@ export function DelayedSamples() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-4xl font-bold text-gray-900">2.8 dias</p>
-            <p className="text-sm text-gray-600 mt-2">Tempo Médio de Chegada (Todas as Amostras)</p>
+            <p className="text-4xl font-bold text-foreground">2.8 dias</p>
+            <p className="text-sm text-muted-foreground mt-2">Tempo Médio de Chegada (Todas as Amostras)</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
             <p className="text-4xl font-bold text-red-600">{delayedSamples.length}</p>
-            <p className="text-sm text-gray-600 mt-2">Amostras Atrasadas &gt; 5 Dias</p>
+            <p className="text-sm text-muted-foreground mt-2">Amostras Atrasadas &gt; 5 Dias</p>
           </CardContent>
         </Card>
         <Card>
@@ -102,7 +102,7 @@ export function DelayedSamples() {
             <p className="text-4xl font-bold text-orange-600">
               {delayedSamples.filter(s => s.urgency === 'critical').length}
             </p>
-            <p className="text-sm text-gray-600 mt-2">Prioridade Crítica (&gt; 10 Dias)</p>
+            <p className="text-sm text-muted-foreground mt-2">Prioridade Crítica (&gt; 10 Dias)</p>
           </CardContent>
         </Card>
       </div>
@@ -116,7 +116,7 @@ export function DelayedSamples() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead>Código DNV</TableHead>
                   <TableHead>Nome do Paciente</TableHead>
                   <TableHead>Nome da Mãe</TableHead>

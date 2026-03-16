@@ -202,7 +202,7 @@ export function OperationalReports() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead>Código RN</TableHead>
                   <TableHead>Controle Interno</TableHead>
                   <TableHead>Nome do Paciente</TableHead>

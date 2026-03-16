@@ -35,7 +35,7 @@ export function DashboardLayout() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background text-foreground">
       {/* Sidebar */}
       <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col text-sidebar-foreground">
         <div className="p-6 border-b border-sidebar-border">

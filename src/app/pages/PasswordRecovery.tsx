@@ -65,7 +65,7 @@ export function PasswordRecovery() {
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Mínimo de 8 caracteres, incluindo maiúsculas, minúsculas e números
                 </p>
               </div>

@@ -59,7 +59,7 @@ export function UserManagement() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead>Nome</TableHead>
                   <TableHead>E-mail</TableHead>
                   <TableHead>Tipo de Perfil</TableHead>
@@ -195,8 +195,8 @@ export function UserManagement() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div className="border rounded-lg p-4">
-              <h4 className="font-bold text-gray-900 mb-2">Administrador</h4>
-              <ul className="space-y-1 text-gray-700">
+              <h4 className="font-bold text-foreground mb-2">Administrador</h4>
+              <ul className="space-y-1 text-foreground/80">
                 <li>• Acesso total ao sistema</li>
                 <li>• Gerenciamento de usuários</li>
                 <li>• Gerenciamento de postos de coleta</li>
@@ -204,8 +204,8 @@ export function UserManagement() {
               </ul>
             </div>
             <div className="border rounded-lg p-4">
-              <h4 className="font-bold text-gray-900 mb-2">Técnico de Laboratório</h4>
-              <ul className="space-y-1 text-gray-700">
+              <h4 className="font-bold text-foreground mb-2">Técnico de Laboratório</h4>
+              <ul className="space-y-1 text-foreground/80">
                 <li>• Triagem e validação de amostras</li>
                 <li>• Importação de arquivos</li>
                 <li>• Validação de resultados laboratoriais</li>
@@ -213,8 +213,8 @@ export function UserManagement() {
               </ul>
             </div>
             <div className="border rounded-lg p-4">
-              <h4 className="font-bold text-gray-900 mb-2">Posto de Coleta</h4>
-              <ul className="space-y-1 text-gray-700">
+              <h4 className="font-bold text-foreground mb-2">Posto de Coleta</h4>
+              <ul className="space-y-1 text-foreground/80">
                 <li>• Registro de pacientes</li>
                 <li>• Formulários de coleta de amostras</li>
                 <li>• Visualizar registros de pacientes</li>
@@ -222,8 +222,8 @@ export function UserManagement() {
               </ul>
             </div>
             <div className="border rounded-lg p-4">
-              <h4 className="font-bold text-gray-900 mb-2">Analista</h4>
-              <ul className="space-y-1 text-gray-700">
+              <h4 className="font-bold text-foreground mb-2">Analista</h4>
+              <ul className="space-y-1 text-foreground/80">
                 <li>• Visualizar todos os relatórios</li>
                 <li>• Exportação de dados</li>
                 <li>• Estatísticas operacionais</li>

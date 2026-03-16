@@ -58,7 +58,7 @@ export function PatientSearch() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead>Código DNV</TableHead>
                   <TableHead>Nome do Recém-Nascido</TableHead>
                   <TableHead>Nome da Mãe</TableHead>
@@ -70,7 +70,7 @@ export function PatientSearch() {
               <TableBody>
                 {searchResults.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-500 py-8">
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
                       Nenhum registro encontrado. Tente um termo de busca diferente.
                     </TableCell>
                   </TableRow>

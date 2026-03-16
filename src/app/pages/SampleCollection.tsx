@@ -162,10 +162,10 @@ export function SampleCollection() {
       </Card>
 
       {/* Instructions */}
-      <Card className="bg-gray-50">
+      <Card className="bg-muted">
         <CardContent className="pt-6">
-          <h4 className="font-semibold text-gray-900 mb-2">Instruções de Coleta:</h4>
-          <ul className="space-y-1 text-sm text-gray-700">
+          <h4 className="font-semibold text-foreground mb-2">Instruções de Coleta:</h4>
+          <ul className="space-y-1 text-sm text-foreground/80">
             <li>• Coletar a amostra de sangue do calcanhar do recém-nascido em papel filtro</li>
             <li>• Garantir a saturação adequada de todos os círculos no papel filtro</li>
             <li>• Deixar as amostras secarem em temperatura ambiente por pelo menos 3 horas</li>

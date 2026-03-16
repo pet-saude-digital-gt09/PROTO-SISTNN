@@ -76,7 +76,7 @@ export function LabResults() {
           <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead className="w-12">
                     <input
                       type="checkbox"
@@ -104,7 +104,7 @@ export function LabResults() {
                   return (
                     <TableRow
                       key={result.id}
-                      className={isAltered ? 'bg-red-50 hover:bg-red-100' : ''}
+                      className={isAltered ? 'bg-destructive/15 hover:bg-destructive/25 dark:bg-destructive/20 dark:hover:bg-destructive/30' : ''}
                     >
                       <TableCell>
                         <input
@@ -176,9 +176,9 @@ export function LabResults() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {Object.entries(referenceValues).map(([test, ref]) => (
-              <div key={test} className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-xs text-gray-600 uppercase font-medium mb-1">{test}</p>
-                <p className="text-sm font-semibold text-gray-900">
+              <div key={test} className="bg-muted/50 p-3 rounded-lg">
+                <p className="text-xs text-muted-foreground uppercase font-medium mb-1">{test}</p>
+                <p className="text-sm font-semibold text-foreground">
                   {ref.min} - {ref.max} {ref.unit}
                 </p>
               </div>

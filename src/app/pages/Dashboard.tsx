@@ -46,8 +46,8 @@ export function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{metric.title}</p>
-                    <p className="text-3xl font-bold text-gray-900">{metric.value}</p>
+                    <p className="text-sm text-muted-foreground mb-1">{metric.title}</p>
+                    <p className="text-3xl font-bold text-foreground">{metric.value}</p>
                   </div>
                   <div className={`w-12 h-12 rounded-full ${metric.bgColor} flex items-center justify-center`}>
                     <Icon className={`w-6 h-6 ${metric.color}`} />
@@ -124,8 +124,8 @@ export function Dashboard() {
                     'bg-blue-500'
                   }`} />
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                    <p className="text-sm text-gray-600">{activity.patient}</p>
+                    <p className="text-sm font-medium text-foreground">{activity.action}</p>
+                    <p className="text-sm text-muted-foreground">{activity.patient}</p>
                     <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
                   </div>
                 </div>
@@ -142,21 +142,21 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-gray-900">98.5%</p>
-              <p className="text-sm text-gray-600 mt-1">Qualidade das Amostras</p>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold text-foreground">98.5%</p>
+              <p className="text-sm text-muted-foreground mt-1">Qualidade das Amostras</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-gray-900">2.3 dias</p>
-              <p className="text-sm text-gray-600 mt-1">Tempo Médio de Processamento</p>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold text-foreground">2.3 dias</p>
+              <p className="text-sm text-muted-foreground mt-1">Tempo Médio de Processamento</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-gray-900">4</p>
-              <p className="text-sm text-gray-600 mt-1">Postos de Coleta</p>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold text-foreground">4</p>
+              <p className="text-sm text-muted-foreground mt-1">Postos de Coleta</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-bold text-gray-900">156</p>
-              <p className="text-sm text-gray-600 mt-1">Testes Este Mês</p>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold text-foreground">156</p>
+              <p className="text-sm text-muted-foreground mt-1">Testes Este Mês</p>
             </div>
           </div>
         </CardContent>

@@ -17,8 +17,8 @@ export function Settings() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between py-3 border-b">
             <div>
-              <p className="font-medium text-gray-900 dark:text-gray-100">Alterar Senha</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Atualize a senha da sua conta</p>
+              <p className="font-medium text-foreground">Alterar Senha</p>
+              <p className="text-sm text-muted-foreground">Atualize a senha da sua conta</p>
             </div>
             <Button variant="outline" onClick={() => navigate('/password-recovery')}>
               Alterar
@@ -26,15 +26,15 @@ export function Settings() {
           </div>
           <div className="flex items-center justify-between py-3 border-b">
             <div>
-              <p className="font-medium text-gray-900 dark:text-gray-100">Notificações por E-mail</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Receber alertas de amostras atrasadas</p>
+              <p className="font-medium text-foreground">Notificações por E-mail</p>
+              <p className="text-sm text-muted-foreground">Receber alertas de amostras atrasadas</p>
             </div>
             <Button variant="outline">Configurar</Button>
           </div>
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="font-medium text-gray-900 dark:text-gray-100">Autenticação de Dois Fatores</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Adicione uma camada extra de segurança</p>
+              <p className="font-medium text-foreground">Autenticação de Dois Fatores</p>
+              <p className="text-sm text-muted-foreground">Adicione uma camada extra de segurança</p>
             </div>
             <Button variant="outline">Habilitar</Button>
           </div>
@@ -48,8 +48,8 @@ export function Settings() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between py-3 border-b">
             <div>
-              <p className="font-medium text-gray-900 dark:text-gray-100">Visão Padrão (Tema)</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Altere o tema visual do sistema</p>
+              <p className="font-medium text-foreground">Visão Padrão (Tema)</p>
+              <p className="text-sm text-muted-foreground">Altere o tema visual do sistema</p>
             </div>
             <Select value={theme} onValueChange={(value: any) => setTheme(value)}>
               <SelectTrigger className="w-[180px]">
@@ -64,8 +64,8 @@ export function Settings() {
           </div>
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="font-medium text-gray-900 dark:text-gray-100">Formato de Data</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">DD/MM/AAAA</p>
+              <p className="font-medium text-foreground">Formato de Data</p>
+              <p className="text-sm text-muted-foreground">DD/MM/AAAA</p>
             </div>
             <Button variant="outline">Alterar</Button>
           </div>

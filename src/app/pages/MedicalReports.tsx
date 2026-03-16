@@ -42,7 +42,7 @@ export function MedicalReports() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">LAUDO MÉDICO</h2>
+                  <h2 className="text-2xl font-bold text-foreground">LAUDO MÉDICO</h2>
                   <p className="text-sm text-gray-600 mt-1">Programa Nacional de Triagem Neonatal</p>
                 </div>
                 <div className="flex gap-2">
@@ -69,53 +69,53 @@ export function MedicalReports() {
               </div>
 
               {/* Report Content */}
-              <div className="border-2 border-gray-300 rounded-lg p-8 bg-white" style={{ aspectRatio: '210/297' }}>
+              <div className="border-2 border-border rounded-lg p-8 bg-card" style={{ aspectRatio: '210/297' }}>
                 {/* Patient Demographics */}
                 <div className="mb-8 pb-6 border-b-2 border-gray-200">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">INFORMAÇÕES DO PACIENTE</h3>
+                  <h3 className="text-lg font-bold text-foreground mb-4">INFORMAÇÕES DO PACIENTE</h3>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600">Código DNV:</p>
-                      <p className="font-mono font-bold text-gray-900">{patient.rnCode}</p>
+                      <p className="text-muted-foreground">Código DNV:</p>
+                      <p className="font-mono font-bold text-foreground">{patient.rnCode}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Controle Interno:</p>
-                      <p className="font-mono font-bold text-gray-900">{labResult.internalControl}</p>
+                      <p className="text-muted-foreground">Controle Interno:</p>
+                      <p className="font-mono font-bold text-foreground">{labResult.internalControl}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Nome do Recém-nascido:</p>
-                      <p className="font-semibold text-gray-900">{patient.name}</p>
+                      <p className="text-muted-foreground">Nome do Recém-nascido:</p>
+                      <p className="font-semibold text-foreground">{patient.name}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Nome da Mãe:</p>
-                      <p className="font-semibold text-gray-900">{patient.motherName}</p>
+                      <p className="text-muted-foreground">Nome da Mãe:</p>
+                      <p className="font-semibold text-foreground">{patient.motherName}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Data de Nascimento:</p>
-                      <p className="font-semibold text-gray-900">
+                      <p className="text-muted-foreground">Data de Nascimento:</p>
+                      <p className="font-semibold text-foreground">
                         {new Date(patient.dateOfBirth).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Data da Coleta:</p>
-                      <p className="font-semibold text-gray-900">
+                      <p className="text-muted-foreground">Data da Coleta:</p>
+                      <p className="font-semibold text-foreground">
                         {new Date(labResult.collectionDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Peso ao Nascer:</p>
-                      <p className="font-semibold text-gray-900">{patient.weight}g</p>
+                      <p className="text-muted-foreground">Peso ao Nascer:</p>
+                      <p className="font-semibold text-foreground">{patient.weight}g</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Prematuro:</p>
-                      <p className="font-semibold text-gray-900">{patient.isPremature ? 'Sim' : 'Não'}</p>
+                      <p className="text-muted-foreground">Prematuro:</p>
+                      <p className="font-semibold text-foreground">{patient.isPremature ? 'Sim' : 'Não'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Test Results */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">RESULTADOS DA TRIAGEM NEONATAL</h3>
+                  <h3 className="text-lg font-bold text-foreground mb-4">RESULTADOS DA TRIAGEM NEONATAL</h3>
                   <div className="space-y-4">
                     {[
                       { name: 'Hipotireoidismo Congênito (TSH)', value: labResult.tsh, unit: 'µU/mL', ref: '0 - 10' },
@@ -125,19 +125,19 @@ export function MedicalReports() {
                       { name: 'Deficiência de Biotinidase', value: labResult.biotinidase, unit: 'nmol/min/mL', ref: '3 - 10' },
                       { name: 'Hiperplasia Adrenal Congênita (HAC)', value: labResult.cah, unit: 'ng/mL', ref: '0 - 15' }
                     ].map((test, index) => (
-                      <div key={index} className="grid grid-cols-4 gap-4 p-3 bg-gray-50 rounded">
+                      <div key={index} className="grid grid-cols-4 gap-4 p-3 bg-muted/50 rounded">
                         <div className="col-span-2">
-                          <p className="font-medium text-gray-900">{test.name}</p>
+                          <p className="font-medium text-foreground">{test.name}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600">Resultado:</p>
-                          <p className="font-bold text-gray-900">
+                          <p className="text-sm text-muted-foreground">Resultado:</p>
+                          <p className="font-bold text-foreground">
                             {test.value} {test.unit}
                           </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Referência:</p>
-                          <p className="text-sm text-gray-900">{test.ref}</p>
+                          <p className="text-sm text-foreground">{test.ref}</p>
                         </div>
                       </div>
                     ))}
@@ -169,7 +169,7 @@ export function MedicalReports() {
 
       {!patient && (
         <Card>
-          <CardContent className="py-12 text-center text-gray-500">
+          <CardContent className="py-12 text-center text-muted-foreground">
             <p>Selecione um paciente para ver seu laudo médico</p>
           </CardContent>
         </Card>

@@ -75,13 +75,13 @@ export function FileImport() {
           <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-400 transition-colors cursor-pointer bg-gray-50"
+            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-400 transition-colors cursor-pointer bg-muted/50"
           >
             <Upload className="w-16 h-16 mx-auto mb-4 text-gray-400" />
             <p className="text-lg font-medium text-gray-700 mb-2">
               Arraste e solte arquivos .txt aqui
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Ou clique para procurar arquivos no seu computador
             </p>
             <p className="text-xs text-gray-400 mt-4">
@@ -98,20 +98,20 @@ export function FileImport() {
         <CardContent>
           <div className="space-y-3">
             {importedFiles.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
+              <p className="text-center text-muted-foreground py-8">
                 Nenhum arquivo importado ainda
               </p>
             ) : (
               importedFiles.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-gray-200"
                 >
                   <div className="flex items-center gap-4">
                     <FileText className="w-8 h-8 text-blue-600" />
                     <div>
-                      <p className="font-medium text-gray-900">{file.name}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="font-medium text-foreground">{file.name}</p>
+                      <p className="text-sm text-muted-foreground">
                         {file.timestamp} • {file.records} registros
                       </p>
                     </div>
