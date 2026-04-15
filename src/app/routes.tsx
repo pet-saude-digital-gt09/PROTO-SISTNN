@@ -16,6 +16,8 @@ import { UserManagement } from './pages/UserManagement';
 import { CollectionUnits } from './pages/CollectionUnits';
 import { Settings } from './pages/Settings';
 import { NotFound } from './pages/NotFound';
+import { ExamsManager } from './pages/ExamsManager';
+import { ExamBuilder } from './pages/ExamBuilder';
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +83,14 @@ export const router = createBrowserRouter([
       {
         path: 'collection-units',
         Component: CollectionUnits,
+      },
+      {
+        path: 'exams-manager',
+        Component: ExamsManager,
+      },
+      {
+        path: 'exam-builder',
+        Component: ExamBuilder,
       },
       {
         path: 'settings',
