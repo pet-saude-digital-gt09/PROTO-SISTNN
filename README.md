@@ -24,7 +24,7 @@ Certifique-se de que você tem o **[Node.js](https://nodejs.org/)** instalado (v
 ### 2. Clonar o repositório
 Em seu terminal, clone o projeto (caso ainda não o possua localmente):
 ```bash
-git clone https://github.com/sauloscm/PROTO-SISTNN.git
+git clone https://github.com/pet-saude-digital-gt09/PROTO-SISTNN
 ```
 
 ### 3. Instalar depedências
