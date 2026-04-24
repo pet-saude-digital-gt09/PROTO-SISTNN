@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { mockNewborns, mockCollectionUnits } from '../data/mockData';
 import { Printer } from 'lucide-react';
+import { api } from '../../services/api';
 
 export function SampleCollection() {
-  const [selectedPatient, setSelectedPatient] = useState('');
+  const [pacientes, setPacientes] = useState<any[]>([]);
+  const [postos, setPostos] = useState<string[]>([]);
+  const [selectedPatientDnv, setSelectedPatientDnv] = useState('');
+  
   const [collectionData, setCollectionData] = useState({
     collectionDate: new Date().toISOString().split('T')[0],
     collectionTime: new Date().toTimeString().split(' ')[0].slice(0, 5),
@@ -17,17 +20,38 @@ export function SampleCollection() {
     technician: ''
   });
 
-  const patient = mockNewborns.find(p => p.id === selectedPatient);
+  useEffect(() => {
+    api.get('/pacientes').then(res => setPacientes(res.data)).catch(console.error);
+    api.get('/postos').then(res => setPostos(res.data)).catch(console.error);
+  }, []);
 
-  const handleGenerateCode = () => {
-    if (!selectedPatient || !collectionData.collectionUnit || !collectionData.technician) {
+  const patient = pacientes.find(p => p.dnv === selectedPatientDnv);
+
+  const handleGenerateCode = async () => {
+    if (!selectedPatientDnv || !collectionData.collectionUnit || !collectionData.technician) {
       toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
     }
-    const rnCode = `202603${Math.floor(Math.random() * 100000).toString().padStart(6, '0')}`;
-    toast.success(`Código DNV Gerado: ${rnCode}`, {
-      description: 'Imprimindo formulário de coleta...'
-    });
+    try {
+      const resp = await api.post('/coletas', {
+        dnv: selectedPatientDnv,
+        data_coleta: collectionData.collectionDate,
+        hora_coleta: collectionData.collectionTime,
+        posto_coleta: collectionData.collectionUnit,
+        tecnico_coletor: collectionData.technician
+      });
+      
+      toast.success(`Código Barras da Coleta: ${resp.data.codigo_barras}`, {
+        description: 'Imprimindo formulário de coleta...'
+      });
+      
+      // Limpa após coletar
+      setSelectedPatientDnv('');
+      // Atualiza lista de pacientes para refletir a mudança de status
+      api.get('/pacientes').then(res => setPacientes(res.data));
+    } catch(err: any) {
+      toast.error(err.response?.data?.errors?.[0] || 'Erro ao registrar coleta.');
+    }
   };
 
   return (
@@ -38,14 +62,14 @@ export function SampleCollection() {
           <CardTitle>Selecionar Recém-Nascido Registrado</CardTitle>
         </CardHeader>
         <CardContent>
-          <Select value={selectedPatient} onValueChange={setSelectedPatient}>
+          <Select value={selectedPatientDnv} onValueChange={setSelectedPatientDnv}>
             <SelectTrigger>
               <SelectValue placeholder="Selecione um recém-nascido..." />
             </SelectTrigger>
             <SelectContent>
-              {mockNewborns.map((patient) => (
-                <SelectItem key={patient.id} value={patient.id}>
-                  {patient.name} - {patient.rnCode} (Mãe: {patient.motherName})
+              {pacientes.filter(p => !['collected', 'enc_analise', 'liberated', 'publicado'].includes(p.status)).map((p) => (
+                <SelectItem key={p.dnv} value={p.dnv}>
+                  {p.nome} - DNV: {p.dnv} (Mãe: {p.mae})
                 </SelectItem>
               ))}
             </SelectContent>
@@ -62,19 +86,19 @@ export function SampleCollection() {
           <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-blue-600 font-medium">Recém-nascido</p>
-              <p className="text-blue-900">{patient.name}</p>
+              <p className="text-blue-900">{patient.nome}</p>
             </div>
             <div>
               <p className="text-blue-600 font-medium">Mãe</p>
-              <p className="text-blue-900">{patient.motherName}</p>
+              <p className="text-blue-900">{patient.mae}</p>
             </div>
             <div>
               <p className="text-blue-600 font-medium">Data de Nascimento</p>
-              <p className="text-blue-900">{new Date(patient.dateOfBirth).toLocaleDateString()}</p>
+              <p className="text-blue-900">{patient.nascimento}</p>
             </div>
             <div>
               <p className="text-blue-600 font-medium">Peso</p>
-              <p className="text-blue-900">{patient.weight}g</p>
+              <p className="text-blue-900">{patient.peso}g</p>
             </div>
           </CardContent>
         </Card>
@@ -125,9 +149,9 @@ export function SampleCollection() {
                   <SelectValue placeholder="Selecione o posto..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {mockCollectionUnits.map((unit) => (
-                    <SelectItem key={unit.id} value={unit.name}>
-                      {unit.name} - {unit.municipality}
+                  {postos.map((p, i) => (
+                    <SelectItem key={i} value={p}>
+                      {p}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -152,10 +176,10 @@ export function SampleCollection() {
             <Button
               onClick={handleGenerateCode}
               className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg"
-              disabled={!selectedPatient}
+              disabled={!selectedPatientDnv}
             >
               <Printer className="w-5 h-5 mr-2" />
-              Gerar Código DNV & Imprimir Formulário de Coleta
+              Registrar Coleta & Gerar Etiquetas
             </Button>
           </div>
         </CardContent>

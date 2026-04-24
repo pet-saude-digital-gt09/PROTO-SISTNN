@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { toast } from 'sonner';
 import { Upload, CheckCircle, FileText } from 'lucide-react';
+import { api } from '../../services/api';
 
 interface ImportedFile {
   name: string;
@@ -32,33 +33,50 @@ export function FileImport() {
     }
   ]);
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     
-    files.forEach(file => {
+    for (const file of files) {
       if (file.name.endsWith('.txt')) {
         const newFile: ImportedFile = {
           name: file.name,
           timestamp: new Date().toLocaleString(),
           status: 'processing',
-          records: Math.floor(Math.random() * 30) + 10
+          records: 0
         };
         
         setImportedFiles(prev => [newFile, ...prev]);
         
-        // Simulate processing
-        setTimeout(() => {
+        try {
+          // Send request to API to trigger the import of pending lab results
+          const res = await api.post('/importar-arquivos');
+          const novos = res.data.novos || 0;
+          
           setImportedFiles(prev => 
             prev.map(f => 
-              f.name === file.name ? { ...f, status: 'success' as const } : f
+              f.name === file.name ? { ...f, status: 'success' as const, records: novos } : f
             )
           );
-        }, 2000);
+          
+          if (novos > 0) {
+            toast.success(`Importação concluída. ${novos} resultados adicionados.`);
+          } else {
+             toast.info("Importação lida. Nenhuma amostra (CI) pendente de laboratório.");
+          }
+          
+        } catch(err) {
+           toast.error('Ocorreu um erro na importação');
+           setImportedFiles(prev => 
+            prev.map(f => 
+              f.name === file.name ? { ...f, status: 'error' as const } : f
+            )
+          );
+        }
       } else {
         toast.error('Apenas arquivos .txt são aceitos');
       }
-    });
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {

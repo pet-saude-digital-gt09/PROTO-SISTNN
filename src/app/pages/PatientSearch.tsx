@@ -1,25 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { mockNewborns } from '../data/mockData';
 import { Search, Edit, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api';
 
 export function PatientSearch() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(mockNewborns);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  const fetchPacientes = (query: string = '') => {
+    api.get(`/pacientes?q=${encodeURIComponent(query)}`)
+      .then(res => {
+        setSearchResults(res.data);
+      })
+      .catch(err => console.error("Erro ao carregar pacientes:", err));
+  };
+
+  useEffect(() => {
+    fetchPacientes();
+  }, []);
 
   const handleSearch = () => {
-    const filtered = mockNewborns.filter(
-      (patient) =>
-        patient.rnCode.includes(searchQuery) ||
-        patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        patient.motherName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setSearchResults(filtered);
+    fetchPacientes(searchQuery);
   };
 
   return (
@@ -76,22 +82,19 @@ export function PatientSearch() {
                   </TableRow>
                 ) : (
                   searchResults.map((patient) => (
-                    <TableRow key={patient.id}>
-                      <TableCell className="font-mono font-medium">{patient.rnCode}</TableCell>
-                      <TableCell>{patient.name}</TableCell>
-                      <TableCell>{patient.motherName}</TableCell>
-                      <TableCell>{new Date(patient.dateOfBirth).toLocaleDateString()}</TableCell>
+                    <TableRow key={patient.dnv}>
+                      <TableCell className="font-mono font-medium">{patient.dnv}</TableCell>
+                      <TableCell>{patient.nome}</TableCell>
+                      <TableCell>{patient.mae}</TableCell>
+                      <TableCell>{patient.nascimento}</TableCell>
                       <TableCell>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           patient.status === 'liberated' ? 'bg-green-100 text-green-800' :
-                          patient.status === 'approved' ? 'bg-blue-100 text-blue-800' :
-                          patient.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                          patient.status === 'enc_analise' || patient.status === 'collected' ? 'bg-blue-100 text-blue-800' :
+                          patient.status === 'enc_recoleta' ? 'bg-red-100 text-red-800' :
                           'bg-yellow-100 text-yellow-800'
                         }`}>
-                          patient.status === 'liberated' ? 'Liberado' :
-                          patient.status === 'approved' ? 'Aprovado' :
-                          patient.status === 'rejected' ? 'Rejeitado' :
-                          'Pendente'
+                          {patient.status_label || patient.status}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -99,7 +102,7 @@ export function PatientSearch() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => navigate(`/patient/${patient.id}`)}
+                            onClick={() => navigate(`/patient/${patient.dnv}`)}
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             Ver
@@ -107,7 +110,7 @@ export function PatientSearch() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => navigate(`/register-patient?id=${patient.id}`)}
+                            onClick={() => navigate(`/register-patient?id=${patient.dnv}`)}
                           >
                             <Edit className="w-4 h-4 mr-1" />
                             Editar

@@ -4,16 +4,25 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { HeartPulse } from 'lucide-react';
+import { api } from '../../services/api';
 
 export function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login - navigate to dashboard
-    navigate('/dashboard');
+    setError('');
+    try {
+      const response = await api.post('/auth/login', { usuario: username, senha: password });
+      if (response.data.status === 'success') {
+        navigate('/dashboard');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Erro ao conectar. Verifique as credenciais.');
+    }
   };
 
   return (
@@ -27,6 +36,11 @@ export function Login() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="username">Usuário</Label>
               <Input

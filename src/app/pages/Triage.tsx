@@ -3,12 +3,12 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { mockNewborns } from '../data/mockData';
 import { CheckCircle, XCircle, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { toast } from 'sonner';
+import { api } from '../../services/api';
 
 export function Triage() {
   const [rnCode, setRnCode] = useState('');
@@ -17,39 +17,67 @@ export function Triage() {
   const [rejectionReason, setRejectionReason] = useState('');
   const [rejectionNotes, setRejectionNotes] = useState('');
 
-  const handleSearch = () => {
-    const patient = mockNewborns.find(p => p.rnCode === rnCode);
-    if (patient) {
-      setSelectedPatient(patient);
-    } else {
-      toast.error('Paciente não encontrado. Por favor, verifique o código DNV.');
+  const handleSearch = async () => {
+    try {
+      const res = await api.get(`/pacientes/${rnCode}`);
+      // Only permit triage if sample was collected
+      if (res.data.paciente && res.data.paciente.status === 'collected') {
+        // Find most recent collection details if needed from res.data.coletas
+        const coletas = res.data.coletas || [];
+        const lastColeta = coletas.length > 0 ? coletas[coletas.length - 1] : {};
+
+        setSelectedPatient({
+          ...res.data.paciente,
+          collectionDate: lastColeta.data_coleta,
+          collectionUnit: lastColeta.posto_coleta
+        });
+      } else {
+         toast.error('Paciente não encontrado ou amostra não foi coletada (Status: ' + (res.data.paciente?.status_label || 'Desconhecido') + ').');
+         setSelectedPatient(null);
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Paciente não encontrado.');
       setSelectedPatient(null);
     }
   };
 
-  const handleApprove = () => {
+  const handleApprove = async () => {
     if (!selectedPatient) return;
-    const internalControl = `IC${new Date().getFullYear()}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
-    toast.success('Amostra aprovada!', {
-      description: `Controle Interno Gerado: ${internalControl}`
-    });
-    setSelectedPatient(null);
-    setRnCode('');
+    try {
+      const resp = await api.post('/triagem/aprovar', { dnv: selectedPatient.dnv });
+      toast.success('Amostra aprovada!', {
+        description: `Controle Interno Gerado: ${resp.data.codigo_ci}`
+      });
+      setSelectedPatient(null);
+      setRnCode('');
+    } catch(err) {
+       toast.error('Erro ao aprovar amostra.');
+    }
   };
 
-  const handleReject = () => {
+  const handleReject = async () => {
     if (!rejectionReason) {
       toast.error('Por favor, selecione um motivo para rejeição');
       return;
     }
-    toast.error('Solicitação de recoleta enviada!', {
-      description: `Motivo: ${rejectionReason}\nObservações: ${rejectionNotes}`
-    });
-    setShowRejectModal(false);
-    setSelectedPatient(null);
-    setRnCode('');
-    setRejectionReason('');
-    setRejectionNotes('');
+    
+    try {
+      await api.post('/triagem/rejeitar', {
+        dnv: selectedPatient.dnv,
+        motivo: rejectionReason,
+        observacoes: rejectionNotes
+      });
+      toast.error('Solicitação de recoleta enviada!', {
+        description: `Motivo: ${rejectionReason}`
+      });
+      setShowRejectModal(false);
+      setSelectedPatient(null);
+      setRnCode('');
+      setRejectionReason('');
+      setRejectionNotes('');
+    } catch(err) {
+      toast.error('Erro ao rejeitar amostra.');
+    }
   };
 
   return (
@@ -69,7 +97,7 @@ export function Triage() {
                   value={rnCode}
                   onChange={(e) => setRnCode(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="202603150001"
+                  placeholder="Ex: 202600000001"
                   maxLength={12}
                   className="font-mono text-lg"
                 />
@@ -82,7 +110,7 @@ export function Triage() {
             {!selectedPatient && (
               <div className="text-center py-12 text-gray-400">
                 <Beaker className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p>Digite o código DNV para buscar os dados do paciente</p>
+                <p>Digite o código DNV para buscar a amostra coletada do recém-nascido</p>
               </div>
             )}
           </CardContent>
@@ -100,29 +128,27 @@ export function Triage() {
                 <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                   <div>
                     <p className="text-xs text-blue-600 font-medium">CÓDIGO DNV</p>
-                    <p className="font-mono text-lg font-bold text-blue-900">{selectedPatient.rnCode}</p>
+                    <p className="font-mono text-lg font-bold text-blue-900">{selectedPatient.dnv}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-blue-600 font-medium">Recém-nascido</p>
-                      <p className="text-blue-900">{selectedPatient.name}</p>
+                      <p className="text-blue-900">{selectedPatient.nome}</p>
                     </div>
                     <div>
                       <p className="text-blue-600 font-medium">Mãe</p>
-                      <p className="text-blue-900">{selectedPatient.motherName}</p>
+                      <p className="text-blue-900">{selectedPatient.mae}</p>
                     </div>
                     <div>
                       <p className="text-blue-600 font-medium">Data de Nascimento</p>
                       <p className="text-blue-900">
-                        {new Date(selectedPatient.dateOfBirth).toLocaleDateString('pt-BR')}
+                        {selectedPatient.nascimento}
                       </p>
                     </div>
                     <div>
                       <p className="text-blue-600 font-medium">Data de Coleta</p>
                       <p className="text-blue-900">
-                        {selectedPatient.collectionDate
-                          ? new Date(selectedPatient.collectionDate).toLocaleDateString('pt-BR')
-                          : 'N/A'}
+                        {selectedPatient.collectionDate || 'N/A'}
                       </p>
                     </div>
                     <div>
@@ -131,7 +157,7 @@ export function Triage() {
                     </div>
                     <div>
                       <p className="text-blue-600 font-medium">Peso</p>
-                      <p className="text-blue-900">{selectedPatient.weight}g</p>
+                      <p className="text-blue-900">{selectedPatient.peso}g</p>
                     </div>
                   </div>
                 </div>
@@ -195,7 +221,7 @@ export function Triage() {
             <DialogDescription>
               {selectedPatient && (
                 <span>
-                  Paciente: {selectedPatient.name} - Código DNV: {selectedPatient.rnCode}
+                  Paciente: {selectedPatient.nome} - Código DNV: {selectedPatient.dnv}
                 </span>
               )}
             </DialogDescription>
@@ -208,12 +234,12 @@ export function Triage() {
                   <SelectValue placeholder="Selecione o motivo..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="insufficient">Amostra de sangue insuficiente</SelectItem>
-                  <SelectItem value="contaminated">Amostra contaminada</SelectItem>
-                  <SelectItem value="not-dried">Amostra não seca adequadamente</SelectItem>
-                  <SelectItem value="damaged">Papel filtro danificado</SelectItem>
-                  <SelectItem value="incorrect-code">Código DNV incorreto</SelectItem>
-                  <SelectItem value="other">Outro</SelectItem>
+                  <SelectItem value="Sangue insuficiente">Amostra de sangue insuficiente</SelectItem>
+                  <SelectItem value="Contaminada">Amostra contaminada</SelectItem>
+                  <SelectItem value="Não seca">Amostra não seca adequadamente</SelectItem>
+                  <SelectItem value="Papel danificado">Papel filtro danificado</SelectItem>
+                  <SelectItem value="Dados errados">Código DNV incorreto</SelectItem>
+                  <SelectItem value="Outro">Outro</SelectItem>
                 </SelectContent>
               </Select>
             </div>

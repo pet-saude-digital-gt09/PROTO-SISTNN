@@ -1,5 +1,6 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '../../../services/api';
 import { 
   LayoutDashboard, 
   UserPlus, 
@@ -23,6 +24,24 @@ import { Button } from '../ui/button';
 
 export function DashboardLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState<{nome: string, perfil: string} | null>(null);
+
+  useEffect(() => {
+    api.get('/auth/session')
+      .then(res => setUser(res.data.user))
+      .catch(() => navigate('/login'));
+  }, [navigate]);
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/auth/logout');
+    } finally {
+      navigate('/login');
+    }
+  };
 
   // Sidebar visibility and resize logic
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -180,14 +199,17 @@ export function DashboardLayout() {
                   <User className="w-5 h-5 text-sidebar-accent-foreground" />
                 </div>
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium">Dr. Carlos Mendes</p>
-                  <p className="text-xs opacity-75">Gerente do Laboratório</p>
+                  <p className="text-sm font-medium">{user ? user.nome : 'Carregando...'}</p>
+                  <p className="text-xs opacity-75">{user ? user.perfil : ''}</p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="text-sidebar-foreground/80 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent shrink-0" asChild>
-                <Link to="/login">
-                  <LogOut className="w-5 h-5" />
-                </Link>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleLogout} 
+                className="text-sidebar-foreground/80 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent shrink-0"
+              >
+                <LogOut className="w-5 h-5" />
               </Button>
             </div>
           </div>

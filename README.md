@@ -1,6 +1,6 @@
 # PROTO-SISTNN (Sistema de Triagem Neonatal)
 
-Este é o protótipo front-end (interface de usuário) do **SISTNN – Sistema de Triagem Neonatal**. A aplicação foi construída para demonstrar os fluxos de trabalho do programa de triagem neonatal, incluindo cadastro de pacientes, coleta de amostras, visualização de laudos e gestão de resultados.
+Este é o front-end (interface de usuário) do **SISTNN – Sistema de Triagem Neonatal**. A aplicação foi construída para demonstrar os fluxos de trabalho do programa de triagem neonatal, incluindo cadastro de pacientes, coleta de amostras, visualização de laudos e gestão de resultados, agora com integração a uma API Flask no back-end.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -58,11 +58,11 @@ Os arquivos minificados serão gerados na pasta `dist/`.
 - `src/app/data/`: Diretório contendo os mocks de dados (informações fictícias usadas no protótipo).
 - `src/styles/`: Arquivos CSS globais e do Tailwind.
 
-## 💡 Observações do Protótipo
-Este projeto é um **protótipo front-end**, portanto:
-- Não possui integração com um banco de dados real no momento.
-- Os dados exibidos (pacientes, amostras, resultados) vêm de um arquivo de **Mock** local (`mockData.ts`).
-- Eventuais ações como login aceitam qualquer dado (ou credenciais fictícias de teste) para fins de navegação pela interface.
+## 💡 Integração com Backend e Banco de Dados
+Este projeto conta com integração completa a um back-end **Flask** e um banco de dados relacional.
+- Os dados exibidos (pacientes, amostras, resultados) são consumidos dinamicamente de uma API RESTful.
+- O sistema realiza operações CRUD (criação, leitura, atualização e exclusão) conectadas ao servidor.
+- As chamadas de rede são gerenciadas através da pasta `src/services/api.ts` utilizando a biblioteca `axios`.
 
 ---
 

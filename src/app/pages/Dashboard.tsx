@@ -1,34 +1,48 @@
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { dashboardMetrics, weeklyProcessingData } from '../data/mockData';
+import { weeklyProcessingData } from '../data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { FlaskConical, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { api } from '../../services/api';
 
 export function Dashboard() {
+  const [stats, setStats] = useState({ amostras_hoje: 0, pendentes: 0, liberados: 0, rejeitadas: 0 });
+  const [atividades, setAtividades] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.get('/dashboard/stats').then(res => {
+      if (res.data) {
+        setStats(res.data.stats || stats);
+        setAtividades(res.data.atividades || []);
+      }
+    }).catch(err => console.error("Erro ao carregar stats", err));
+  }, []);
+
   const metrics = [
     {
       title: 'Amostras de Hoje',
-      value: dashboardMetrics.samplesToday,
+      value: stats.amostras_hoje,
       icon: FlaskConical,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50'
     },
     {
       title: 'Resultados Pendentes',
-      value: dashboardMetrics.pendingResults,
+      value: stats.pendentes,
       icon: Clock,
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-50'
     },
     {
       title: 'Laudos Liberados',
-      value: dashboardMetrics.liberatedReports,
+      value: stats.liberados,
       icon: CheckCircle2,
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
     {
       title: 'Amostras Rejeitadas',
-      value: dashboardMetrics.rejectedSamples,
+      value: stats.rejeitadas,
       icon: XCircle,
       color: 'text-red-600',
       bgColor: 'bg-red-50'
@@ -91,42 +105,18 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                {
-                  action: 'Nova amostra recebida',
-                  patient: 'Lucas Silva Santos',
-                  time: '10 min atrás',
-                  type: 'success'
-                },
-                {
-                  action: 'Resultado liberado',
-                  patient: 'Ana Julia Oliveira',
-                  time: '1 hora atrás',
-                  type: 'info'
-                },
-                {
-                  action: 'Amostra rejeitada',
-                  patient: 'Pedro Costa',
-                  time: '2 horas atrás',
-                  type: 'error'
-                },
-                {
-                  action: 'Novo registro',
-                  patient: 'Maria Santos',
-                  time: '3 horas atrás',
-                  type: 'success'
-                }
-              ].map((activity, index) => (
+              {atividades.length === 0 ? (
+                 <p className="text-sm text-muted-foreground text-center py-4">Sem atividades recentes</p>
+              ) : atividades.map((activity, index) => (
                 <div key={index} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${
-                    activity.type === 'success' ? 'bg-green-500' :
-                    activity.type === 'error' ? 'bg-red-500' :
+                  <div className={`w-2 h-2 rounded-full mt-2 ${activity.dot === 'd-green' ? 'bg-green-500' :
+                    activity.dot === 'd-red' ? 'bg-red-500' :
                     'bg-blue-500'
                   }`} />
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">{activity.action}</p>
-                    <p className="text-sm text-muted-foreground">{activity.patient}</p>
-                    <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+                    <p className="text-sm font-medium text-foreground">{activity.titulo}</p>
+                    <p className="text-sm text-muted-foreground">{activity.paciente}</p>
+                    <p className="text-xs text-gray-400 mt-1">{activity.tempo}</p>
                   </div>
                 </div>
               ))}

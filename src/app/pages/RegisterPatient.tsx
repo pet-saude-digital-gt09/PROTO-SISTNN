@@ -7,31 +7,38 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api';
 
 export function RegisterPatient() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    rnName: '',
+    nome: '',
     cns: '',
-    dob: '',
-    weight: '',
-    isPremature: 'no',
-    motherName: '',
-    motherDOB: '',
-    motherRace: '',
-    fatherName: '',
-    fatherDOB: '',
-    fatherRace: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: ''
+    nascimento: '',
+    peso: '',
+    prematuro: 'Não',
+    mae: '',
+    nasc_mae: '',
+    raca_mae: '',
+    nome_pai: '',
+    nasc_pai: '',
+    raca_pai: '',
+    endereco: '',
+    cidade: '',
+    estado: '',
+    cep: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Paciente registrado com sucesso!');
-    navigate('/sample-collection');
+    try {
+      await api.post('/pacientes', formData);
+      toast.success('Paciente registrado com sucesso!');
+      navigate('/sample-collection');
+    } catch (err: any) {
+      toast.error('Erro ao registrar paciente. Verifique os dados.');
+      console.error(err);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -51,8 +58,8 @@ export function RegisterPatient() {
               <Label htmlFor="rnName">Nome do Recém-nascido *</Label>
               <Input
                 id="rnName"
-                value={formData.rnName}
-                onChange={(e) => handleChange('rnName', e.target.value)}
+                value={formData.nome}
+                onChange={(e) => handleChange('nome', e.target.value)}
                 required
               />
             </div>
@@ -74,8 +81,8 @@ export function RegisterPatient() {
               <Input
                 id="dob"
                 type="date"
-                value={formData.dob}
-                onChange={(e) => handleChange('dob', e.target.value)}
+                value={formData.nascimento}
+                onChange={(e) => handleChange('nascimento', e.target.value)}
                 required
               />
             </div>
@@ -85,8 +92,8 @@ export function RegisterPatient() {
               <Input
                 id="weight"
                 type="number"
-                value={formData.weight}
-                onChange={(e) => handleChange('weight', e.target.value)}
+                value={formData.peso}
+                onChange={(e) => handleChange('peso', e.target.value)}
                 placeholder="ex:, 3200"
                 required
               />
@@ -94,13 +101,13 @@ export function RegisterPatient() {
 
             <div className="space-y-2">
               <Label htmlFor="isPremature">Nascimento Prematuro *</Label>
-              <Select value={formData.isPremature} onValueChange={(value: string) => handleChange('isPremature', value)}>
+              <Select value={formData.prematuro} onValueChange={(value: string) => handleChange('prematuro', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="no">Não</SelectItem>
-                  <SelectItem value="yes">Sim</SelectItem>
+                  <SelectItem value="Não">Não</SelectItem>
+                  <SelectItem value="Sim">Sim</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -117,8 +124,8 @@ export function RegisterPatient() {
               <Label htmlFor="motherName">Nome da Mãe *</Label>
               <Input
                 id="motherName"
-                value={formData.motherName}
-                onChange={(e) => handleChange('motherName', e.target.value)}
+                value={formData.mae}
+                onChange={(e) => handleChange('mae', e.target.value)}
                 required
               />
             </div>
@@ -128,8 +135,8 @@ export function RegisterPatient() {
               <Input
                 id="motherDOB"
                 type="date"
-                value={formData.motherDOB}
-                onChange={(e) => handleChange('motherDOB', e.target.value)}
+                value={formData.nasc_mae}
+                onChange={(e) => handleChange('nasc_mae', e.target.value)}
                 required
               />
             </div>
@@ -197,8 +204,8 @@ export function RegisterPatient() {
               <Label htmlFor="address">Endereço Residencial *</Label>
               <Input
                 id="address"
-                value={formData.address}
-                onChange={(e) => handleChange('address', e.target.value)}
+                value={formData.endereco}
+                onChange={(e) => handleChange('endereco', e.target.value)}
                 required
               />
             </div>
@@ -207,8 +214,8 @@ export function RegisterPatient() {
               <Label htmlFor="city">Cidade *</Label>
               <Input
                 id="city"
-                value={formData.city}
-                onChange={(e) => handleChange('city', e.target.value)}
+                value={formData.cidade}
+                onChange={(e) => handleChange('cidade', e.target.value)}
                 required
               />
             </div>
@@ -217,8 +224,8 @@ export function RegisterPatient() {
               <Label htmlFor="state">Estado *</Label>
               <Input
                 id="state"
-                value={formData.state}
-                onChange={(e) => handleChange('state', e.target.value)}
+                value={formData.estado}
+                onChange={(e) => handleChange('estado', e.target.value)}
                 required
               />
             </div>
@@ -227,8 +234,8 @@ export function RegisterPatient() {
               <Label htmlFor="zipCode">CEP *</Label>
               <Input
                 id="zipCode"
-                value={formData.zipCode}
-                onChange={(e) => handleChange('zipCode', e.target.value)}
+                value={formData.cep}
+                onChange={(e) => handleChange('cep', e.target.value)}
                 required
               />
             </div>
